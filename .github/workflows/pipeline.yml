@@ -1,4 +1,4 @@
-name: Lint
+name: Deploy
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  lint:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -16,3 +16,9 @@ jobs:
 
       - name: Lint
         run: npm run eslint
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm run test
