@@ -9,8 +9,8 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  deploy:
-    name: Deploy
+  build-and-test:
+    name: Build and test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -35,6 +35,15 @@ jobs:
 
       - name: Deploy
         if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
+        run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
+
+  deploy:
+    name: Deploy
+    if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
+    needs: [build-and-test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
         run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
 
   tag_release:
