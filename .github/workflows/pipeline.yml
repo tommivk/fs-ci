@@ -10,6 +10,7 @@ on:
 
 jobs:
   deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -37,6 +38,7 @@ jobs:
         run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
 
   tag_release:
+    name: Tag release
     if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
     needs: [deploy]
     runs-on: ubuntu-latest
