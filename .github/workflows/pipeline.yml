@@ -55,3 +55,20 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG_PREFIX: v
           DEFAULT_BUMP: patch
+
+  notify_discord:
+    name: Notify discord
+    if: ${{ always() }}
+    needs: [deploy, tag_release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify discord
+        uses: sarisia/actions-status-discord@v1.16.0
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          nodetail: true
+          title: ${{ needs.deploy.result == 'failure' && 'Deployment failed' || 'Deployment successful' }}
+          description: |
+            Version ${{ github.event.release.tag_name }}
+            [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          color: ${{ needs.deploy.result == 'failure' && '#bd0f23' || '#1a9c25' }}
