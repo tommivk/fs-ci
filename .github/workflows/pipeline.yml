@@ -40,8 +40,16 @@ jobs:
     if: ${{ github.event_name == 'push' }}
     needs: [deploy]
     runs-on: ubuntu-latest
-    uses: anothrNick/github-tag-action@v1.75.0
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      TAG_PREFIX: v
-      DEFAULT_BUMP: patch
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: "0"
+
+      - name: tag release
+        uses: anothrNick/github-tag-action@v1.75.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_PREFIX: v
+          DEFAULT_BUMP: patch
