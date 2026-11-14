@@ -15,3 +15,6 @@ Start by running `npm install` inside the project folder
 # Render URL
 
 https://fs-ci-n8pg.onrender.com/
+
+# Repository used for the last exercises
+https://github.com/tommivk/movies
