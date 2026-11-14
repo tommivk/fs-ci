@@ -10,7 +10,11 @@ module.exports = [
       'eslint.config.js',
       '.eslintrc.js',
       'node_modules/**',
-      'dist/**'
+      'dist/**',
+      'playwright.config.js',
+      'playwright-report/**',
+      'test-results/**',
+      'e2e/**'
     ]
   },
   js.configs.recommended,
