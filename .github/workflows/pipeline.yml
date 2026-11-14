@@ -68,10 +68,10 @@ jobs:
           TAG_PREFIX: v
           DEFAULT_BUMP: patch
 
-  notify_discord:
-    name: Notify discord
-    if: ${{ always() }}
-    needs: [deploy, tag_release]
+  notify_success:
+    name: Notify success
+    if: ${{ needs.deploy.result == 'success' }}
+    needs: [deploy]
     runs-on: ubuntu-latest
     steps:
       - name: Notify discord
@@ -79,9 +79,25 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
           nodetail: true
-          title: ${{ needs.deploy.result == 'failure' && 'Deployment failed' || 'Deployment successful' }}
+          title: Deployment successful
           description: |
-            ${{ needs.deploy.result != 'failure' && format('Version {0}', needs.tag_release.outputs.tag) || '' }}
-            ${{ needs.deploy.result == 'failure' && format('Commit: {0}', github.sha) || '' }}
+            Commit: ${{ github.sha }}
             [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-          status: ${{ needs.deploy.result == 'failure' && 'Failure' || 'Success' }}
+          status: Success
+
+  notify_failure:
+    name: Notify failure
+    if: ${{ needs.deploy.result == 'failure' }}
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify discord
+        uses: sarisia/actions-status-discord@v1.16.0
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          nodetail: true
+          title: Deployment failed
+          description: |
+            Commit: ${{ github.sha }}
+            [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          status: Failure
