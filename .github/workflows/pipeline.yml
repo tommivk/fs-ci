@@ -71,4 +71,5 @@ jobs:
           description: |
             Version ${{ github.event.release.tag_name }}
             [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            ${{ needs.deploy.result == 'failure' && format('Commit: {0}', github.sha) || '' }}
           color: ${{ needs.deploy.result == 'failure' && '#bd0f23' || '#1a9c25' }}
