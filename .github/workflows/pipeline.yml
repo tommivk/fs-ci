@@ -6,7 +6,7 @@ on:
       - main
   pull_request:
     braches: [main]
-    types: [opened, synchronized]
+    types: [opened, synchronize]
 
 jobs:
   deploy:
