@@ -1,0 +1,16 @@
+name: Scheduled health check
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+
+jobs:
+  health_check:
+    name: Health check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check
+        uses: jtalk/url-health-check-action@v5
+        with:
+          url: https://fs-ci-n8pg.onrender.com/
