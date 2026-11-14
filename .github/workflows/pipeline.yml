@@ -45,6 +45,8 @@ jobs:
     if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
     needs: [deploy]
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
@@ -53,6 +55,7 @@ jobs:
           fetch-depth: "0"
 
       - name: tag release
+        id: tag
         uses: anothrNick/github-tag-action@4ed44965e0db8dab2b466a16da04aec3cc312fd8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -72,7 +75,7 @@ jobs:
           nodetail: true
           title: ${{ needs.deploy.result == 'failure' && 'Deployment failed' || 'Deployment successful' }}
           description: |
-            Version ${{ github.event.release.tag_name }}
-            [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            ${{ needs.deploy.result != 'failure' && format('Version {0}', needs.tag_release.outputs.tag) || '' }}
             ${{ needs.deploy.result == 'failure' && format('Commit: {0}', github.sha) || '' }}
-          color: ${{ needs.deploy.result == 'failure' && '#bd0f23' || '#1a9c25' }}
+            [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          status: ${{ needs.deploy.result == 'failure' && 'Failure' || 'Success' }}
