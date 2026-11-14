@@ -3,6 +3,7 @@
 html, body {
   height: 100%;
   margin: 0;
+  background: #212121;
 }
 
 body {
@@ -42,9 +43,10 @@ footer {
 }
 
 .list-item {
+  border-radius: 6px;
   background-position: center;
   background-repeat: no-repeat;
-  background-color: #eee;
+  background-color: #3c3333;
   margin: 10px;
   height: 150px;
   width: 150px;
@@ -52,13 +54,14 @@ footer {
 }
 
 .list-item-name {
+  border-radius: 0 0 6px 6px;
   position: absolute;
   color: #000;
   bottom: 0;
   width: 100%;
   text-align: center;
   text-transform: capitalize;
-  background-color: #eee;
+  background-color: #c8baba;
 }
 
 .links {
@@ -67,9 +70,16 @@ footer {
   margin-bottom: 10px;
   text-decoration: none;
   width: 332px;
+  padding: 20px;
+  margin: auto;
+}
+
+.links a {
+  color: whitesmoke;
 }
 
 .pokemon-page {
+  margin: auto;
   background: linear-gradient(140deg, var(--pokemon-type-color) 0%, #ddd 100%);
   border-radius: 15px;
   display: flex;
